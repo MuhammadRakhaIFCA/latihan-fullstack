@@ -18,7 +18,7 @@ const RegisterPage = () => {
         e.preventDefault
     }
     return (
-        <div className="bg-slate-300 w-full h-screen items-center justify-center m-0 flex">
+        <div className="bg-slate-300 w-full min-h-screen items-center justify-center m-0 flex">
             <Card className="w-[50%] py-5">
                 <CardHeader>
                     <CardTitle className="text-3xl">Create Account</CardTitle>
