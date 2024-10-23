@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 
-const LoginPage = () => {
+const RegisterPage = () => {
     const form = useForm({
         defaultValues: {
             username: "",
@@ -21,7 +21,7 @@ const LoginPage = () => {
         <div className="bg-slate-300 w-full h-screen items-center justify-center m-0 flex">
             <Card className="w-[50%] py-5">
                 <CardHeader>
-                    <CardTitle className="text-3xl">Welcome back</CardTitle>
+                    <CardTitle className="text-3xl">Create Account</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
@@ -34,6 +34,22 @@ const LoginPage = () => {
                                         <FormLabel>Username</FormLabel>
                                         <FormControl>
                                             <Input placeholder="username" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="email" {...field} />
                                         </FormControl>
                                         <FormDescription>
 
@@ -66,9 +82,9 @@ const LoginPage = () => {
                     </Form>
                 </CardContent>
                 <CardFooter className="flex justify-center">
-                    <span>Don't have an account? </span>
-                    <Link to="/register">
-                        <a className="text-blue-600"> Register</a>
+                    <span>Already have an account?</span>
+                    <Link to="/">
+                        <a className="text-blue-600"> Login</a>
                     </Link>
 
                 </CardFooter>
@@ -79,4 +95,4 @@ const LoginPage = () => {
     )
 }
 
-export default LoginPage
+export default RegisterPage
