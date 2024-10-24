@@ -11,11 +11,12 @@ import Image10 from '@/assets/10.png';
 import Image11 from '@/assets/11.png';
 import Image12 from '@/assets/11.png';
 import Image13 from '@/assets/11.png';
+import { ScrollArea } from './ui/scroll-area';
 
 export const Leftbar = () => {
     return (
-        <div className="flex flex-col w-[20%] overflow-auto h-screen">
-            <div className="flex flex-row gap-3 items-center mx-4 my-2">
+        <ScrollArea className="flex flex-col w-[20%] h-screen">
+            <div className="flex flex-row gap-3 items-center ml-4 my-2">
                 <img src={Image1} alt="" className='w-7 h-7' />
                 <span >user name</span>
             </div>
@@ -82,6 +83,6 @@ export const Leftbar = () => {
                 <span>Courses</span>
             </div>
 
-        </div>
+        </ScrollArea>
     )
 }

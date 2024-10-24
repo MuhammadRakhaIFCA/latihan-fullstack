@@ -1,22 +1,27 @@
 import { FaUserFriends } from "react-icons/fa"
+import { Button } from "./ui/button"
+import { ScrollArea } from "./ui/scroll-area"
 
 export const Rightbar = () => {
     return (
         <>
-            <div className="flex flex-col w-[20%] h-screen overflow-auto content-between">
+            <ScrollArea className="flex flex-col w-[20%] h-screen content-between pl-3">
                 <div className="my-10">
                     <p>suggested for you</p>
                     <div className="flex flex-row gap-3 items-center my-3">
                         <FaUserFriends className="w-7 " />
                         <span>user name</span>
+                        <Button className="bg-blue-500 h-6">Follow</Button>
                     </div>
                     <div className="flex flex-row gap-3 items-center my-3">
                         <FaUserFriends className="w-7 " />
                         <span>user name</span>
+                        <Button className="bg-blue-500 h-6">Follow</Button>
                     </div>
                     <div className="flex flex-row gap-3 items-center my-3">
                         <FaUserFriends className="w-7 " />
                         <span>user name</span>
+                        <Button className="bg-blue-500 h-6">Follow</Button>
                     </div>
                 </div>
                 <div className="my-10">
@@ -45,7 +50,7 @@ export const Rightbar = () => {
                 </div>
 
 
-            </div>
+            </ScrollArea>
         </>
     )
 }

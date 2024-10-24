@@ -8,6 +8,8 @@ import RegisterPage from './pages/guest/RegisterPage'
 import { Navbar } from './components/Navbar'
 import { Leftbar } from './components/Leftbar'
 import { Rightbar } from './components/Rightbar'
+import HomePage from './pages/user/HomePage'
+import { ScrollArea } from './components/ui/scroll-area'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -17,12 +19,13 @@ function App() {
       <Navbar />
       <div className="flex h-screen">
         <Leftbar />
-        <div className="flex-1 overflow-auto ">
+        <ScrollArea className="flex-1 overflow-auto ">
           <Routes>
             <Route path="/" Component={LoginPage} />
             <Route path="/register" Component={RegisterPage} />
+            <Route path="/home" Component={HomePage} />
           </Routes>
-        </div>
+        </ScrollArea>
         <Rightbar />
       </div>
     </>

@@ -6,26 +6,34 @@ import { Input } from "./ui/input";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { CiMail } from "react-icons/ci";
+import { Link } from "react-router-dom";
+import profilePic from "@/assets/map.png"
 
 export const Navbar = () => {
     return (
         <>
-            <div className="grid grid-cols-3">
-                <div className="flex flex-row gap-5 p-3 items-center content-center">
-                    <h1 className="font-bold text-2xl">lamasocial</h1>
+            <div className="grid grid-cols-[20%_60%_19%]">
+                <div className="flex flex-row gap-5 p-3 items-center">
+                    <Link to="/home">
+                        <h1 className="font-bold text-2xl">lamasocial</h1>
+                    </Link>
                     <IoHomeOutline className="w-5 h-5" />
                     <FaRegMoon className="w-5 h-5" />
                     <MdOutlineApps className="w-5 h-5" />
                 </div>
-                <div className="flex flex-row gap-5 p-3 items-center content-center">
+                <div className="flex flex-row gap-2 p-3 items-center justify-start">
                     <IoIosSearch className="w-5 h-5" />
-                    <Input className="w-full"></Input>
+                    <Input className="w-[90%]"></Input>
                 </div>
 
-                <div className="flex flex-row gap-5 p-3 items-center content-start">
+                <div className="flex flex-row gap-5 p-3 items-center justify-center">
                     <RiAccountCircleLine className="w-5 h-5" />
                     <CiMail className="w-5 h-5" />
                     <IoMdNotificationsOutline className="w-5 h-5" />
+                    <div className="flex flex-row ml-3 gap-2 items-center">
+                        <img src={profilePic} alt="" className="rounded-full" />
+                        <span>username</span>
+                    </div>
                 </div>
             </div>
 
