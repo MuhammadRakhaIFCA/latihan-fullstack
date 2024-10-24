@@ -10,6 +10,7 @@ import { Leftbar } from './components/Leftbar'
 import { Rightbar } from './components/Rightbar'
 import HomePage from './pages/user/HomePage'
 import { ScrollArea } from './components/ui/scroll-area'
+import ProfilePage from './pages/user/ProfilePage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -24,6 +25,7 @@ function App() {
             <Route path="/" Component={LoginPage} />
             <Route path="/register" Component={RegisterPage} />
             <Route path="/home" Component={HomePage} />
+            <Route path="/profile/:userId" Component={ProfilePage} />
           </Routes>
         </ScrollArea>
         <Rightbar />
