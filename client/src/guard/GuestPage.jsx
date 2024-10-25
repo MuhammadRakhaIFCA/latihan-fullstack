@@ -5,13 +5,12 @@ import { Navigate } from "react-router-dom"
 const GuestPage = (props) => {
     const { currentUser } = useContext(AuthContext)
 
-    if (currentUser.id) {
-        return (
-            <Navigate to="/home"></Navigate>
-        )
+    if (!currentUser) {
+        return props.children
     }
-
-    return props.children
+    return (
+        <Navigate to="/home"></Navigate>
+    )
 }
 
 export default GuestPage

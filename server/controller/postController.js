@@ -11,6 +11,17 @@ export const getPost = async (req, res) => {
     }
 }
 
+export const getFollowedPost = async (req, res) => {
+    const { userId } = req.body
+
+    try {
+        const data = await posts.getFollowedPost({ userId })
+        res.status(200).json(data)
+    } catch (error) {
+
+    }
+}
+
 export const addPost = async (req, res) => {
     const { description, image, userId } = req.body
     try {

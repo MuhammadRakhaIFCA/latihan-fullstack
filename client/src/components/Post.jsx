@@ -48,13 +48,15 @@ export const Post = (props) => {
         <Card key={props.index} className="w-[90%] justify-self-center mb-10">
             <CardHeader className="p-5">
                 <div className="flex justify-between">
-                    <div className="flex items-center justify-start gap-3">
-                        <img src={profilePic} alt="" className="rounded-full" />
-                        <div className="flex flex-col">
-                            <p className="text-md font-semibold">username</p>
-                            <p className="text-sm">post time</p>
+                    <Link to="/profile/1">
+                        <div className="flex items-center justify-start gap-3">
+                            <img src={profilePic} alt="" className="rounded-full" />
+                            <div className="flex flex-col">
+                                <p className="text-md font-semibold">username</p>
+                                <p className="text-sm">post time</p>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                     <div className="justify-self-end items-center">
                         <DropdownMenu>
                             <DropdownMenuTrigger>

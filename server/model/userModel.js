@@ -45,6 +45,50 @@ class UserModel {
             console.log(error)
         }
     }
+
+    async getUserById(userId) {
+        try {
+            const result = await pool.query(`SELECT * FROM users WHERE id = $1`, [userId])
+
+            return result.rows[0]
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async getFollowedUsers({ userId }) {
+        try {
+            const result = await pool.query(`
+                SELECT u.id, u.username, u.profile_picture 
+                FROM users u
+                INNER JOIN follows f ON u.id = f.followed_id
+                WHERE f.follower_id = $1
+            `, [userId]);
+
+            return result.rows; // List of followed users
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+    async getUnfollowedUsers({ userId }) {
+        try {
+            const result = await pool.query(`
+                SELECT u.id, u.username, u.profile_picture 
+                FROM users u
+                WHERE u.id != $1 
+                AND u.id NOT IN (
+                    SELECT followed_id FROM follows WHERE follower_id = $1
+                )
+            `, [userId]);
+
+            return result.rows; // List of unfollowed users
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
 }
 
 export default UserModel

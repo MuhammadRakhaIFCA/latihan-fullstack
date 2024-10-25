@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser"
 import bodyParser from "body-parser"
 import postRoutes from "./routes/postRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
+import followRoutes from "./routes/followRoutes.js"
+import commentRoutes from "./routes/commentRoutes.js"
 
 const app = express()
 
@@ -26,6 +28,8 @@ app.use(bodyParser.json())
 
 app.use("/posts", postRoutes)
 app.use("/users", userRoutes)
+app.use("/comments", commentRoutes)
+app.use("/", followRoutes)
 
 
 
