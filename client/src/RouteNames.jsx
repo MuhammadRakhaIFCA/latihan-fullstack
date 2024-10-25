@@ -12,30 +12,19 @@ import HomePage from './pages/user/HomePage'
 import { ScrollArea } from './components/ui/scroll-area'
 import ProfilePage from './pages/user/ProfilePage'
 import { AuthContext } from './context/AuthContext'
-import { RouteNames } from './RouteNames'
 
-function App() {
-  const { currentUser } = useContext(AuthContext)
+export const RouteNames = () => {
 
   return (
-    <>
-      {currentUser ?
-        <>
-          <Navbar />
-          <div className="flex h-screen">
-            <Leftbar />
-            <ScrollArea className="flex-1 overflow-auto ">
-              <RouteNames />
-            </ScrollArea>
-            <Rightbar />
-          </div>
-        </>
-        : <RouteNames />}
 
-    </>
+    <Routes>
+      <Route path="/" Component={LoginPage} />
+      <Route path="/register" Component={RegisterPage} />
+      <Route path="/home" Component={HomePage} />
+      <Route path="/profile/:userId" Component={ProfilePage} />
+    </Routes>
   )
 }
 
 
 
-export default App
