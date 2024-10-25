@@ -2,7 +2,7 @@
 import profilePic from "@/assets/map.png"
 import dayTree from "@/assets/day-tree.jpg"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Post } from "@/components/Post"
 import { FaFacebook, FaInstagram, FaLinkedin, FaPinterest, FaTwitter } from "react-icons/fa"
 import { FaLocationDot } from "react-icons/fa6";
@@ -14,6 +14,10 @@ import { Navigate, redirect } from "react-router-dom"
 
 
 const ProfilePage = () => {
+
+    useEffect(() => {
+
+    }, [])
     const handleLogout = async () => {
         try {
             await axiosExpress.post("/users/logout")
