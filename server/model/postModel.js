@@ -32,6 +32,14 @@ class PostModel {
 
         }
     }
+    async getMyPost(userId) {
+        try {
+            const result = await pool.query(`SELECT * FROM posts WHERE user_id = $1`, [userId])
+            return result.rows
+        } catch (error) {
+
+        }
+    }
     async addPost({ description, image, userId }) {
         try {
             const result = await pool.query(`INSERT INTO posts (description, image, user_id) VALUES ($1, $2, $3)

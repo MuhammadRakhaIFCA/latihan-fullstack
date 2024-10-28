@@ -22,6 +22,17 @@ export const getFollowedPost = async (req, res) => {
     }
 }
 
+export const getMyPost = async (req, res) => {
+    const userId = req.params.userId
+
+    try {
+        const data = await posts.getMyPost(userId)
+        res.status(200).json(data)
+    } catch (error) {
+
+    }
+}
+
 export const addPost = async (req, res) => {
     const { description, image, userId } = req.body
     try {

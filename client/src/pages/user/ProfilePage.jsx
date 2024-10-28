@@ -2,7 +2,7 @@
 import profilePic from "@/assets/map.png"
 import dayTree from "@/assets/day-tree.jpg"
 
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Post } from "@/components/Post"
 import { FaFacebook, FaInstagram, FaLinkedin, FaPinterest, FaTwitter } from "react-icons/fa"
 import { FaLocationDot } from "react-icons/fa6";
@@ -11,11 +11,25 @@ import { Button } from "@/components/ui/button"
 import { axiosExpress } from "@/lib/axios"
 import SignedInPage from "@/guard/SignedInPage"
 import { Navigate, redirect } from "react-router-dom"
+import { AuthContext } from "@/context/AuthContext"
+import { getMyPost } from "@/services/service"
 
 
 const ProfilePage = () => {
+    const { currentUser } = useContext(AuthContext)
+    const [posts, setPosts] = useState([])
 
     useEffect(() => {
+        const getMyPost = async () => {
+            try {
+                const data = await axiosExpress.get(`/posts/my/${currentUser.id}`)
+                setPosts(data.data)
+            } catch (error) {
+
+            }
+        }
+
+        getMyPost()
 
     }, [])
     const handleLogout = async () => {
@@ -58,27 +72,42 @@ const ProfilePage = () => {
                             <span>website</span>
                         </div>
                         <div>
-                            <p>Following : 0</p>
-                            <p>Follower : 0</p>
+                            <p>Following : {currentUser.following_count}</p>
+                            <p>Follower : {currentUser.follower_count}</p>
                         </div>
                     </div>
                     <div className="my-5">
-                        <Button variants="danger">
-                            Follow
-                        </Button>
+                        {!currentUser.id ?
+                            <Button variants="danger">
+                                Follow
+                            </Button> :
+                            <>
+                                <Button variants="alert" onClick={() => handleLogout()}>
+                                    Logout
+                                </Button>
+                                <Button variants="alert" onClick={() => console.log(posts)}>
+                                    Add Post
+                                </Button>
+                            </>
+                        }
 
-                        <Button variants="alert" onClick={() => handleLogout()}>
-                            Logout
-                        </Button>
 
                     </div>
                 </div>
                 <div className="my-10 grid justify-items-stretch">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                        <Post
-                            index={index}
-                        />
-                    ))}
+                    {
+                        posts.map((post) => {
+                            return (
+                                <Post
+                                    key={post.id}
+                                    id={post.id}
+                                    userId={post.userId}
+                                    description={post.description}
+                                    profile_picture={currentUser.profile_picture}
+                                />
+                            )
+                        })
+                    }
                 </div>
             </div>
         </SignedInPage>

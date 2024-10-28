@@ -89,6 +89,16 @@ export const getFollowedPost = async (userId) => {
 
     }
 }
+export const getMyPost = async (userId) => {
+    try {
+        const data = await axiosExpress.get("/posts/my", {
+            userId
+        })
+        return data.data
+    } catch (error) {
+
+    }
+}
 
 export const addPost = async (description, image, userId) => {
     try {
@@ -97,6 +107,7 @@ export const addPost = async (description, image, userId) => {
             image,
             userId
         })
+        return data.data
     } catch (error) {
 
     }
@@ -107,6 +118,7 @@ export const getComment = async (postId) => {
         const data = await axiosExpress.get("/comments/get", {
             postId
         })
+        return data.data
     } catch (error) {
 
     }
