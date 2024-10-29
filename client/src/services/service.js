@@ -41,7 +41,7 @@ export const follow = async (followerId, followedId) => {
 }
 export const unfollow = async (followerId, followedId) => {
     try {
-        const data = await axiosExpress.post("/unfollows", {
+        const data = await axiosExpress.post("/unfollow", {
             followerId,
             followedId
         })

@@ -25,10 +25,10 @@ export const deleteComment = async (req, res) => {
 }
 
 export const getComment = async (req, res) => {
-    const { postId } = req.body
+    const postId = req.params.postId
 
     try {
-        const data = await comments.getComment({ postId })
+        const data = await comments.getComment(postId)
         res.status(202).json(data)
     } catch (error) {
         console.log(error)

@@ -39,3 +39,13 @@ export const getFollowing = async (req, res) => {
         console.log(error)
     }
 }
+
+export const followStatus = async (req, res) => {
+    const { followerId, followedId } = req.query
+    try {
+        const isFollowing = await follows.followStatus({ followerId, followedId })
+        res.status(200).json({ isFollowing });
+    } catch (error) {
+        console.log(error)
+    }
+}

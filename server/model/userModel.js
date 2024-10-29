@@ -19,8 +19,8 @@ class UserModel {
             if (existingEmail.rows.length > 0) {
                 return { error: { message: "Email already taken", type: "email" } };
             }
-            const result = await pool.query('INSERT INTO users (email, username, password) VALUES ($1, $2, $3) RETURNING *',
-                [email, username, hashedPassword])
+            const result = await pool.query('INSERT INTO users (email, username, password, profile_picture) VALUES ($1, $2, $3, $4) RETURNING *',
+                [email, username, hashedPassword, "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"])
             return result.rows[0]
         } catch (error) {
 
@@ -55,7 +55,7 @@ class UserModel {
             console.log(error)
         }
     }
-    async getFollowedUsers({ userId }) {
+    async getFollowedUsers(userId) {
         try {
             const result = await pool.query(`
                 SELECT u.id, u.username, u.profile_picture 

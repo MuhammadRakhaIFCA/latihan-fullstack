@@ -12,10 +12,20 @@ export const getPost = async (req, res) => {
 }
 
 export const getFollowedPost = async (req, res) => {
-    const { userId } = req.body
+    const userId = req.params.userId
 
     try {
-        const data = await posts.getFollowedPost({ userId })
+        const data = await posts.getFollowedPost(userId)
+        res.status(200).json(data)
+    } catch (error) {
+
+    }
+}
+export const getUnfollowedPost = async (req, res) => {
+    const userId = req.params.userId
+
+    try {
+        const data = await posts.getUnfollowedPost(userId)
         res.status(200).json(data)
     } catch (error) {
 
@@ -33,8 +43,10 @@ export const getMyPost = async (req, res) => {
     }
 }
 
+
 export const addPost = async (req, res) => {
-    const { description, image, userId } = req.body
+    const { description, userId } = req.body
+    const image = req.file ? req.file.filename : null
     try {
         const data = await posts.addPost({ description, image, userId })
         res.status(201).json(data)

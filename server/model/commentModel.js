@@ -23,7 +23,7 @@ class commentModel {
         }
     }
 
-    async getComment({ postId }) {
+    async getComment(postId) {
         try {
             const result = await pool.query(`
                 SELECT 

@@ -8,7 +8,7 @@ const commentRoutes = express.Router()
 
 commentRoutes.post("/add", addComment)
 commentRoutes.delete("/delete", deleteComment)
-commentRoutes.get("/get", getComment)
+commentRoutes.get("/get/:postId", getComment)
 
 
 

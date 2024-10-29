@@ -12,12 +12,44 @@ import img from "@/assets/img.png"
 
 import { Post } from "@/components/Post"
 import SignedInPage from "@/guard/SignedInPage"
+import { useContext, useEffect, useState } from "react"
+import { AuthContext } from "@/context/AuthContext"
+import { Button } from "@/components/ui/button"
+import { axiosExpress } from "@/lib/axios"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 
 
 const HomePage = () => {
+    const { currentUser } = useContext(AuthContext)
+    const [user, setUser] = useState()
+    const queryClient = useQueryClient()
+
+    const { isPending, isError, data, error } = useQuery({
+        queryKey: ['posts'],
+        queryFn: () =>
+            axiosExpress.get(`/posts/get/${currentUser.id}`).then((res => res.data))
+    })
 
 
+
+    useEffect(() => {
+        const getUserById = async (id) => {
+            try {
+                const data = await axiosExpress.get(`/users/get/${params.userId}`)
+                console.log(data.data)
+                setUser(data.data)
+            } catch (error) {
+
+            }
+        }
+
+        getUserById()
+
+    }, [])
+
+    if (isPending) return <div>Loading...</div>;
+    if (isError) return <div>Error: {error.message}</div>;
     return (
         <SignedInPage>
             <div className="w-full overflow-x-hidden">
@@ -54,13 +86,20 @@ const HomePage = () => {
 
                 </div>
                 <div className="my-10 grid justify-items-stretch">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                        <Post
-                            index={index}
-                        />
-
-
-                    ))}
+                    {
+                        data.map((post) => {
+                            return (
+                                <Post
+                                    key={post.id}
+                                    id={post.post_id}
+                                    userId={post.user_id}
+                                    description={post.description}
+                                    profile_picture={currentUser.profile_picture}
+                                    username={post.username}
+                                />
+                            )
+                        })
+                    }
                 </div>
             </div>
         </SignedInPage>

@@ -47,17 +47,17 @@ export const getUserById = async (req, res) => {
 }
 
 export const getFollowedUsers = async (req, res) => {
-    const { userId } = req.body
+    const userId = req.params.userId
 
     try {
-        const data = await users.getFollowedUsers({ userId })
+        const data = await users.getFollowedUsers(userId)
         res.status(202).json(data)
     } catch (error) {
 
     }
 }
 export const getUnfollowedUsers = async (req, res) => {
-    const { userId } = req.body
+    const { userId } = req.params.userId
 
     try {
         const data = await users.getUnfollowedUsers({ userId })

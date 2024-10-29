@@ -8,16 +8,21 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { CiMail } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import profilePic from "@/assets/map.png"
+import { useContext } from "react";
+import { AuthContext } from "@/context/AuthContext";
 
 export const Navbar = () => {
+    const { currentUser } = useContext(AuthContext)
     return (
         <>
             <div className="grid grid-cols-[20%_60%_19%]">
                 <div className="flex flex-row gap-5 p-3 items-center">
-                    <Link to="/home">
+                    <Link to="/explore">
                         <h1 className="font-bold text-2xl">lamasocial</h1>
                     </Link>
-                    <IoHomeOutline className="w-5 h-5" />
+                    <Link to="/home">
+                        <IoHomeOutline className="w-5 h-5" />
+                    </Link>
                     <FaRegMoon className="w-5 h-5" />
                     <MdOutlineApps className="w-5 h-5" />
                 </div>
@@ -30,10 +35,12 @@ export const Navbar = () => {
                     <RiAccountCircleLine className="w-5 h-5" />
                     <CiMail className="w-5 h-5" />
                     <IoMdNotificationsOutline className="w-5 h-5" />
-                    <div className="flex flex-row ml-3 gap-2 items-center">
-                        <img src={profilePic} alt="" className="rounded-full" />
-                        <span>username</span>
-                    </div>
+                    <Link to={`/profile/${currentUser.id}`}>
+                        <div className="flex flex-row ml-3 gap-2 items-center">
+                            <img src={profilePic} alt={profilePic} className="rounded-full" />
+                            <span>{currentUser.username}</span>
+                        </div>
+                    </Link>
                 </div>
             </div>
 

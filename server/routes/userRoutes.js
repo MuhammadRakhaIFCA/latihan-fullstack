@@ -8,7 +8,7 @@ userRoutes.post("/register", register)
 userRoutes.post("/login", login)
 userRoutes.post("/logout", logout)
 userRoutes.get("/get/:userId", getUserById)
-userRoutes.get("/followed", getFollowedUsers)
-userRoutes.get("/unfollowed", getUnfollowedUsers)
+userRoutes.get("/followed/:userId", getFollowedUsers)
+userRoutes.get("/unfollowed/:userId", getUnfollowedUsers)
 
 export default userRoutes

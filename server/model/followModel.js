@@ -20,7 +20,7 @@ class followModel {
     async unfollow({ followerId, followedId }) {
         try {
             const result = await pool.query(`DELETE FROM follows
-                WHERE follower_id = $1 AND following_id = $2`, [followerId, followedId])
+                WHERE follower_id = $1 AND followed_id = $2`, [followerId, followedId])
             if (!result) {
                 return error
             }
@@ -50,6 +50,18 @@ class followModel {
                 JOIN users u ON f.followed_id = u.id
                 WHERE f.follower_id = $1`, [userId])
             return result.rows
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async followStatus({ followerId, followedId }) {
+        try {
+            const result = await pool.query(`SELECT * FROM follows 
+             WHERE follower_id = $1 AND followed_id = $2`,
+                [followerId, followedId])
+            const isFollowing = result.rows.length > 0;
+            return isFollowing
         } catch (error) {
             console.log(error)
         }

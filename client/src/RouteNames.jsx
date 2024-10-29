@@ -12,6 +12,7 @@ import HomePage from './pages/user/HomePage'
 import { ScrollArea } from './components/ui/scroll-area'
 import ProfilePage from './pages/user/ProfilePage'
 import { AuthContext } from './context/AuthContext'
+import ExploreHomePage from './pages/user/ExploreHomePage'
 
 export const RouteNames = () => {
 
@@ -21,6 +22,7 @@ export const RouteNames = () => {
       <Route path="/" Component={LoginPage} />
       <Route path="/register" Component={RegisterPage} />
       <Route path="/home" Component={HomePage} />
+      <Route path="/explore" Component={ExploreHomePage} />
       <Route path="/profile/:userId" Component={ProfilePage} />
     </Routes>
   )
