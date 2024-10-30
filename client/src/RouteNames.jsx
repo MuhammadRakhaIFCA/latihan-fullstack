@@ -13,17 +13,19 @@ import { ScrollArea } from './components/ui/scroll-area'
 import ProfilePage from './pages/user/ProfilePage'
 import { AuthContext } from './context/AuthContext'
 import ExploreHomePage from './pages/user/ExploreHomePage'
+import EditProfilePage from './pages/user/EditProfilePage'
 
 export const RouteNames = () => {
 
   return (
 
     <Routes>
-      <Route path="/" Component={LoginPage} />
-      <Route path="/register" Component={RegisterPage} />
-      <Route path="/home" Component={HomePage} />
-      <Route path="/explore" Component={ExploreHomePage} />
-      <Route path="/profile/:userId" Component={ProfilePage} />
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/home" element={<HomePage />} />
+      <Route path="/explore" element={<ExploreHomePage />} />
+      <Route path="/profile/:userId" element={<ProfilePage />} />
+      <Route path="/profile/edit" element={<EditProfilePage />} />
     </Routes>
   )
 }

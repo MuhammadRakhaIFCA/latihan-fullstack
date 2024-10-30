@@ -89,6 +89,55 @@ class UserModel {
         }
     }
 
+    async editUser({ username, profile_picture, location, website, userId }) {
+        try {
+            const existingUsername = await pool.query(
+                'SELECT * FROM users WHERE username = $1 AND id != $2',
+                [username, userId]
+            );
+
+            if (existingUsername.rows.length > 0) {
+                return { error: { message: "Username already taken", type: "username" } };
+            }
+
+            const result = await pool.query(
+                `UPDATE users SET username = $1, profile_picture = $2, 
+                location = $3, website = $4 WHERE id = $5 RETURNING *`,
+                [username, profile_picture || "", location, website, userId]
+            );
+
+            return result.rows[0]
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Error updating profile" });
+        }
+    }
+
+    async getAllUsers() {
+        try {
+            const result = await pool.query(`SELECT * FROM users`)
+            return result.rows
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async searchUsers(query) {
+        try {
+            const result = await pool.query(
+                `SELECT id, username, profile_picture 
+                 FROM users 
+                 WHERE LOWER(username) LIKE LOWER($1)`,
+                [`%${query}%`]
+            );
+            return result.rows;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+
 }
 
 export default UserModel

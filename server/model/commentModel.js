@@ -30,6 +30,7 @@ class commentModel {
                 c.id AS comment_id,
                 c.content AS content,
                 c.post_id,
+                c.created_at,
                 u.id AS user_id,
                 u.username,
                 u.profile_picture
@@ -39,7 +40,7 @@ class commentModel {
             WHERE p.id = $1`, [postId])
             return result.rows
         } catch (error) {
-            console.log(error)
+            return { error: { message: "no comment yet" } }
         }
     }
 }

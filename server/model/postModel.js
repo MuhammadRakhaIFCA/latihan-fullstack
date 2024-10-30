@@ -21,6 +21,7 @@ class PostModel {
                 p.description,
                 p.image,
                 p.user_id,
+                p.created_at,
                 u.username,
                 u.profile_picture
             FROM posts AS p
@@ -39,6 +40,7 @@ class PostModel {
                 p.id AS post_id,
                 p.description,
                 p.image,
+                p.created_at,
                 p.user_id,
                 u.username,
                 u.profile_picture

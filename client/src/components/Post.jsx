@@ -13,8 +13,9 @@ import { AuthContext } from "@/context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Profile from "@/assets/img.png"
 import profile_picture from "@/assets/day-tree.jpg"
+import moment from "moment";
 
-export const Post = ({ id, userId, description, profile_picture, username, index, postImage }) => {
+export const Post = ({ id, userId, description, profile_picture, username, index, postImage, created_at }) => {
     const { currentUser } = useContext(AuthContext);
     const [content, setContent] = useState("");
     const [openComments, setOpenComments] = useState({});
@@ -56,10 +57,10 @@ export const Post = ({ id, userId, description, profile_picture, username, index
                 <div className="flex justify-between">
                     <Link to={`/profile/${userId}`}>
                         <div className="flex items-center gap-3">
-                            <img src={Profile} alt={Profile} className="rounded-full" />
-                            <div className="flex flex-col">
-                                <p className="text-md font-semibold">{username}</p>
-                                <p className="text-sm">post time</p>
+                            <img src={`/uploads/${profile_picture}`} alt={Profile} className="rounded-full w-8 h-8" />
+                            <div className="flex flex-col justify-start">
+                                <p className="text-md font-semibold ">{username}</p>
+                                <p className="text-sm">{moment(created_at).format("MMM Do YYYY")}</p>
                             </div>
                         </div>
                     </Link>
@@ -156,7 +157,7 @@ export const Post = ({ id, userId, description, profile_picture, username, index
                                                 <p className="text-justify">{comment.content}</p>
                                             </div>
                                             <p className="place-self-center text-sm text-gray-500">
-                                                Time posted
+                                                {moment(comment.created_at, "YYYYMMDD").fromNow()}
                                             </p>
                                         </div>
                                     ))
