@@ -15,6 +15,9 @@ import { AuthContext } from "@/context/AuthContext"
 import { getMyPost } from "@/services/service"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Input } from "@/components/ui/input"
+import { SheetComponent } from "@/components/SheetComponent"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Label } from "@/components/ui/label"
 
 
 const ProfilePage = () => {
@@ -183,9 +186,19 @@ const ProfilePage = () => {
                             <IoGlobeOutline className="w-6 h-6" />
                             <span>{user.website}</span>
                         </div>
-                        <div>
-                            <p>Following: {user ? user.following_count : 0}</p>
-                            <p>Follower: {user ? user.follower_count : 0}</p>
+                        <div className="cursor-pointer">
+                            <SheetComponent
+                                count={user.following_count}
+                                userId={user.id}
+                            >
+                                Following
+                            </SheetComponent>
+                            <SheetComponent
+                                count={user.follower_count}
+                                userId={user.id}
+                            >
+                                Follower
+                            </SheetComponent>
                         </div>
                     </div>
                     <div className="my-5 gap-3 flex flex-row justify-center">

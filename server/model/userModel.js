@@ -55,6 +55,21 @@ class UserModel {
             console.log(error)
         }
     }
+    async getFollowers(userId) {
+        try {
+            const result = await pool.query(`
+                SELECT u.id, u.username, u.profile_picture 
+                FROM users u
+                INNER JOIN follows f ON u.id = f.follower_id
+                WHERE f.followed_id = $1
+            `, [userId]);
+
+            return result.rows; // List of followed users
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
     async getFollowedUsers(userId) {
         try {
             const result = await pool.query(`
@@ -136,6 +151,36 @@ class UserModel {
             throw error;
         }
     }
+
+    async getFollowRecommendations(userId) {
+        try {
+            const result = await pool.query(`
+                SELECT u.id AS user_id, u.username, u.profile_picture, COUNT(f.follower_id) AS follow_count
+                FROM follows f
+                INNER JOIN users u ON u.id = f.followed_id
+                WHERE f.follower_id IN (
+                    SELECT followed_id
+                    FROM follows
+                    WHERE follower_id = $1
+                ) 
+                AND f.followed_id NOT IN (
+                    SELECT followed_id
+                    FROM follows
+                    WHERE follower_id = $1
+                )
+                AND f.followed_id != $1
+                GROUP BY u.id, u.username, u.profile_picture
+                ORDER BY follow_count DESC
+                LIMIT 3;
+            `, [userId]);
+
+            return result.rows; // Returns top 3 recommended users with additional info
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
 
 
 }

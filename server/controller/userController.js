@@ -46,6 +46,17 @@ export const getUserById = async (req, res) => {
     }
 }
 
+export const getFollowers = async (req, res) => {
+    const userId = req.params.userId
+
+    try {
+        const data = await users.getFollowers(userId)
+        res.status(202).json(data)
+    } catch (error) {
+
+    }
+}
+
 export const getFollowedUsers = async (req, res) => {
     const userId = req.params.userId
 
@@ -108,3 +119,13 @@ export const searchUsers = async (req, res) => {
     }
 };
 
+export const getFollowRecommendations = async (req, res) => {
+    const userId = req.params.userId
+
+    try {
+        const data = await users.getFollowRecommendations(userId)
+        res.status(200).json(data)
+    } catch (error) {
+        console.log(error)
+    }
+}

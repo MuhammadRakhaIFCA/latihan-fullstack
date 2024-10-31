@@ -9,6 +9,9 @@ import { useContext, useEffect, useState } from "react";
 import { CiCamera, CiFaceSmile } from "react-icons/ci";
 import { LuSendHorizonal } from "react-icons/lu";
 import { Link, useParams } from "react-router-dom";
+import defaultPic from "@/assets/default.jpg"
+import tree from "@/assets/tree.jpg"
+import moment from "moment";
 
 const ChatPage = () => {
     const { currentUser } = useContext(AuthContext)
@@ -85,14 +88,14 @@ const ChatPage = () => {
 
 
     return (
-        <div className="min-h-screen flex flex-col bg-gray-100">
+        <div className="flex flex-col bg-gray-100 min-h-screen">
             {/* {console.log(chats)} */}
             <div className="bg-blue-500 text-white py-4 px-6 flex items-center justify-between">
                 <Link to={`/profile/${receiver.id}`}>
                     <div className="flex gap-2 items-center">
                         <Avatar>
                             <AvatarImage src={`/uploads/${receiver.profile_picture}`} alt="@shadcn" />
-                            <AvatarFallback>CN</AvatarFallback>
+                            <AvatarFallback><img src={defaultPic} alt="" /></AvatarFallback>
                         </Avatar>
                         <h1 className="text-lg font-semibold">{receiver.username}</h1>
                     </div>
@@ -103,55 +106,81 @@ const ChatPage = () => {
             </div>
 
 
-            <ScrollArea className="flex-1 px-4 py-6 space-y-4 mb-[68px] max-h-[50%]">
+            <ScrollArea className="flex-1 px-4 py-6 space-y-4 mb-2 max-h-[50%]">
                 {loadingChat ?
                     <p>loading chat...</p>
                     : <div className="flex flex-col space-y-3">
-                        <div className="flex items-start gap-2">
-                            <Avatar>
-                                <AvatarImage src={`/uploads/${receiver.profile_picture}`} alt="@shadcn" />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                            <div className="bg-white p-3 rounded-xl shadow-md max-w-[75%]">
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur eos adipisci, voluptates ipsum aut officiis numquam laudantium quaerat beatae laboriosam. Voluptatibus aut consequatur sint repellendus quam iure necessitatibus, distinctio rerum!</p>
-                            </div>
-                        </div>
-                        <div className="flex justify-end gap-2">
-
-                            <div className="bg-blue-500 text-white p-3 rounded-xl shadow-md max-w-[75%]">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid numquam tenetur ducimus eius assumenda praesentium ratione iusto eveniet doloribus dolorum. Laboriosam doloremque consequatur blanditiis placeat eius tenetur amet accusamus sit!</p>
-                            </div>
-                            <Avatar>
-                                <AvatarImage src={`/uploads/${sender.profile_picture}`} alt="@shadcn" />
-                                <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                        </div>
                         {
-                            chats ?
-                                chats.map((chat) => {
-                                    return chat.sender_id == sender.id ?
-                                        <div className="flex justify-end gap-2">
+                            chats ? (
+                                chats.map((chat, index) => {
+                                    // Get the date of the current and previous chats
+                                    const currentDate = moment(chat.created_at).format("YYYY-MM-DD");
+                                    const previousDate = index > 0 ? moment(chats[index - 1].created_at).format("YYYY-MM-DD") : null;
+                                    const isDifferentDay = currentDate !== previousDate;
 
-                                            <div className="bg-blue-500 text-white p-3 rounded-xl shadow-md max-w-[75%]">
-                                                <p>{chat.content}</p>
-                                            </div>
-                                            <Avatar>
-                                                <AvatarImage src={`/uploads/${sender.profile_picture}`} alt="@shadcn" />
-                                                <AvatarFallback>CN</AvatarFallback>
-                                            </Avatar>
-                                        </div>
+                                    return (
+                                        <div key={chat.id}>
+                                            {/* Render date separator if it's a new day */}
+                                            {isDifferentDay && (
+                                                <div className="flex justify-center my-2">
+                                                    <span className="bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm">
+                                                        {moment(chat.created_at).format("MMMM DD, YYYY")}
+                                                    </span>
+                                                </div>
+                                            )}
 
-                                        : <div className="flex items-start gap-2">
-                                            <Avatar>
-                                                <AvatarImage src={`/uploads/${receiver.profile_picture}`} alt="@shadcn" />
-                                                <AvatarFallback>CN</AvatarFallback>
-                                            </Avatar>
-                                            <div className="bg-white p-3 rounded-xl shadow-md max-w-[75%]">
-                                                <p>{chat.content}</p>
-                                            </div>
+                                            {/* Render chat message */}
+                                            {chat.sender_id === sender.id ? (
+                                                <div className="flex justify-end items-start gap-2">
+                                                    <div className="bg-blue-500 rounded-xl shadow-md max-w-[50%]">
+                                                        {chat.image && (
+                                                            <img src={`/uploads/${chat.image}`} alt="" className="rounded-t-xl shadow-md" />
+                                                        )}
+                                                        {chat.content && (
+                                                            <p className="p-2 text-white rounded-b-xl shadow-md text-left">
+                                                                {chat.content}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <Avatar>
+                                                            <AvatarImage src={`/uploads/${sender.profile_picture}`} alt="@shadcn" />
+                                                            <AvatarFallback><img src={defaultPic} alt="" /></AvatarFallback>
+                                                        </Avatar>
+                                                        <span className="text-sm text-gray-800 text-right">
+                                                            {moment(chat.created_at).format('HH:mm')}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-start gap-2">
+                                                    <div>
+                                                        <Avatar>
+                                                            <AvatarImage src={`/uploads/${receiver.profile_picture}`} alt="@shadcn" />
+                                                            <AvatarFallback>CN</AvatarFallback>
+                                                        </Avatar>
+                                                        <span className="text-sm text-gray-800 text-right">
+                                                            {moment(chat.created_at).format('HH:mm')}
+                                                        </span>
+                                                    </div>
+                                                    <div className="bg-white rounded-xl shadow-md max-w-[50%]">
+                                                        {chat.image && (
+                                                            <img src={`/uploads/${chat.image}`} alt="" className="rounded-t-xl shadow-md" />
+                                                        )}
+                                                        {chat.content && (
+                                                            <p className="p-2 text-black rounded-b-xl shadow-md text-left">
+                                                                {chat.content}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
+                                    );
                                 })
-                                : <p>no chat</p>
+                            ) : (
+                                <p>no chat</p>
+                            )
                         }
                     </div>
                 }

@@ -94,8 +94,9 @@ const HomePage = () => {
                                     id={post.post_id}
                                     userId={post.user_id}
                                     description={post.description}
-                                    profile_picture={currentUser.profile_picture}
+                                    profile_picture={post.profile_picture}
                                     username={post.username}
+                                    postImage={post.image}
                                     created_at={post.created_at}
                                 />
                             )

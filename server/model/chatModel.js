@@ -25,7 +25,6 @@ class chatModel {
 
     async getChat(senderId, receiverId) {
         try {
-            console.log(senderId, receiverId)
             const result = await pool.query(`
                 SELECT 
                     c.id AS chat_id,

@@ -21,10 +21,10 @@ function App() {
     <>
       {currentUser ?
         <>
-          <Navbar className="" />
-          <div className="flex h-screen relative">
+          <Navbar />
+          <div className="flex h-screen">
             <Leftbar />
-            <ScrollArea className="flex-1 overflow-auto">
+            <ScrollArea className="flex-1 overflow-auto ">
               <RouteNames />
             </ScrollArea>
             <Rightbar />

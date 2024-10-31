@@ -3,8 +3,9 @@ import { Button } from "./ui/button"
 import { ScrollArea } from "./ui/scroll-area"
 import { useContext } from "react"
 import { AuthContext } from "@/context/AuthContext"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { axiosExpress } from "@/lib/axios"
+import { Link } from "react-router-dom"
 
 export const Rightbar = () => {
     const { currentUser } = useContext(AuthContext)
@@ -18,7 +19,28 @@ export const Rightbar = () => {
         queryKey: ["unfollowedUsers"],
         queryFn: () => axiosExpress.get(`users/unfollowed/${currentUser.id}`)
     })
-    if (loadingUsers || loadingnewUsers) {
+    const { data: recommendedUsers = [], isLoading: loadingRecommendedUsers } = useQuery({
+        queryKey: ["recommendedUsers"],
+        queryFn: () => axiosExpress.get(`users/recommended/${currentUser.id}`)
+    })
+    const { mutate: follow, isLoading: loadingFollow } = useMutation({
+        mutationFn: async (userId) => {
+            const { data } = await axiosExpress.post('/follow', {
+                followerId: currentUser.id,
+                followedId: userId
+            })
+            return data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(["followedUsers"]);
+            queryClient.invalidateQueries(["recommendedUsers"]);
+        },
+
+    });
+    if (loadingFollow) {
+        return <p>following</p>
+    }
+    if (loadingUsers || loadingnewUsers || loadingRecommendedUsers) {
         return (
             <p>loading users</p>
         )
@@ -28,30 +50,36 @@ export const Rightbar = () => {
             <ScrollArea className="flex flex-col w-[20%] h-screen content-between pl-3">
                 <div className="my-10">
                     <p>suggested for you</p>
-                    <div className="flex flex-row gap-3 items-center my-3">
-                        <FaUserFriends className="w-7 " />
-                        <span>user name</span>
-                        <Button className="bg-blue-500 h-6" >Follow</Button>
-                    </div>
-                    <div className="flex flex-row gap-3 items-center my-3">
-                        <FaUserFriends className="w-7 " />
-                        <span>user name</span>
-                        <Button className="bg-blue-500 h-6">Follow</Button>
-                    </div>
-                    <div className="flex flex-row gap-3 items-center my-3">
-                        <FaUserFriends className="w-7 " />
-                        <span>user name</span>
-                        <Button className="bg-blue-500 h-6">Follow</Button>
-                    </div>
+                    {
+                        recommendedUsers ? recommendedUsers.data.map((user) => {
+                            return (
+                                <div className="flex flex-row gap-3 items-center my-3">
+                                    <img src="user.profile_picture" className="w-7 rounded-full" />
+                                    <span>{user.username}</span>
+                                    <Button className="bg-blue-500 h-6" onClick={() => follow(user.user_id)}>Follow</Button>
+                                </div>
+                            )
+                        })
+                            : <p>no recommended user...</p>
+                    }
                 </div>
                 <div className="my-10">
                     <p>latest activities</p>
                     {
                         followedUsers ? followedUsers.data.map((user) => {
                             return (
-                                <div className="flex flex-row gap-3 items-center my-3">
-                                    <img className="rounded-full w-7 h-7" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" />
-                                    <span>{user.username}</span>
+                                <div className="flex flex-row items-center m-3 justify-between">
+                                    <Link to={`/profile/${user.id}`}>
+                                        <div className="flex gap-2">
+                                            <img className="rounded-full w-7 h-7 border-2 border-gray-200" src={`/uploads/${user.profile_picture}`} alt="" />
+                                            <span>{user.username}</span>
+                                        </div>
+                                    </Link>
+                                    <Link to={`/chat/${user.id}`}>
+                                        <Button variant="outline">
+                                            chat
+                                        </Button>
+                                    </Link>
                                 </div>
                             )
                         }) : <p>no friends</p>

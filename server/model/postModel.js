@@ -27,7 +27,7 @@ class PostModel {
             FROM posts AS p
             JOIN users AS u ON p.user_id = u.id
             JOIN follows AS f ON f.followed_id = p.user_id
-            WHERE f.follower_id = $1`, [userId])
+            WHERE f.follower_id = $1 ORDER BY p.created_at DESC`, [userId])
             return result.rows
         } catch (error) {
 
@@ -47,7 +47,7 @@ class PostModel {
             FROM posts AS p
             JOIN users AS u ON p.user_id = u.id
             JOIN follows AS f ON f.followed_id != p.user_id
-            WHERE f.follower_id = $1`, [userId])
+            WHERE f.follower_id = $1 ORDER BY p.created_at DESC`, [userId])
             return result.rows
         } catch (error) {
 
@@ -56,7 +56,7 @@ class PostModel {
     async getMyPost(userId) {
         try {
             const result = await pool.query(`SELECT * FROM users JOIN posts 
-                ON posts.user_id = users.id WHERE posts.user_id = $1`, [userId])
+                ON posts.user_id = users.id WHERE posts.user_id = $1 ORDER BY posts.created_at DESC`, [userId])
             return result.rows
         } catch (error) {
 
@@ -74,7 +74,7 @@ class PostModel {
     }
     async deletePost({ postId, userId }) {
         try {
-            const result = await pool.query(`DELETE`)
+            const result = await pool.query(`DELETE FROM posts WHERE id = $1`, [postId])
         } catch (error) {
             console.log(error)
         }
