@@ -6,6 +6,7 @@ import postRoutes from "./routes/postRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
 import followRoutes from "./routes/followRoutes.js"
 import commentRoutes from "./routes/commentRoutes.js"
+import chatRoutes from "./routes/chatRoutes.js"
 
 const app = express()
 
@@ -32,6 +33,7 @@ app.use("../../client/public/uploads", express.static("uploads"));
 app.use("/posts", postRoutes)
 app.use("/users", userRoutes)
 app.use("/comments", commentRoutes)
+app.use("/chats", chatRoutes)
 app.use("/", followRoutes)
 
 

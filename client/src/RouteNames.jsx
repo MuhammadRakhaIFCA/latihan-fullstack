@@ -14,6 +14,7 @@ import ProfilePage from './pages/user/ProfilePage'
 import { AuthContext } from './context/AuthContext'
 import ExploreHomePage from './pages/user/ExploreHomePage'
 import EditProfilePage from './pages/user/EditProfilePage'
+import ChatPage from './pages/ChatPage'
 
 export const RouteNames = () => {
 
@@ -26,6 +27,7 @@ export const RouteNames = () => {
       <Route path="/explore" element={<ExploreHomePage />} />
       <Route path="/profile/:userId" element={<ProfilePage />} />
       <Route path="/profile/edit" element={<EditProfilePage />} />
+      <Route path="/chat/:userId" element={<ChatPage />} />
     </Routes>
   )
 }
