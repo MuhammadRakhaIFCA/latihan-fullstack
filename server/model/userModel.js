@@ -174,6 +174,7 @@ class UserModel {
                 LIMIT 3;
             `, [userId]);
 
+
             return result.rows; // Returns top 3 recommended users with additional info
         } catch (error) {
             console.error(error);
@@ -181,7 +182,22 @@ class UserModel {
         }
     }
 
+    async getUserWithChat(userId) {
+        try {
+            const result = await pool.query(`SELECT DISTINCT
+        u.id,
+        u.username,
+        u.profile_picture
+        FROM users as u
+        JOIN chats as c
+        ON u.id = c.sender_id OR u.id = c.receiver_id
+        WHERE c.sender_id = $1 OR receiver_id = $1;       
+        `, [userId])
+            return result.rows
+        } catch (error) {
 
+        }
+    }
 
 }
 

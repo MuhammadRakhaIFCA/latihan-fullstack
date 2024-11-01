@@ -91,7 +91,9 @@ export const Navbar = () => {
 
                 <div className="flex flex-row gap-5 p-3 items-center justify-center">
                     <RiAccountCircleLine className="w-5 h-5" />
-                    <CiMail className="w-5 h-5" />
+                    <Link to="/chat/all">
+                        <CiMail className="w-5 h-5" />
+                    </Link>
                     <IoMdNotificationsOutline className="w-5 h-5" />
                     <Link to={`/profile/${currentUser.id}`}>
                         <div className="flex flex-row ml-3 gap-2 items-center">

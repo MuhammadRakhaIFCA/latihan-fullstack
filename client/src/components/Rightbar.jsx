@@ -48,14 +48,16 @@ export const Rightbar = () => {
     return (
         <>
             <ScrollArea className="flex flex-col w-[20%] h-screen content-between pl-3">
-                <div className="my-10">
+                <div className="mb-10">
                     <p>suggested for you</p>
                     {
                         recommendedUsers ? recommendedUsers.data.map((user) => {
                             return (
-                                <div className="flex flex-row gap-3 items-center my-3">
-                                    <img src="user.profile_picture" className="w-7 rounded-full" />
-                                    <span>{user.username}</span>
+                                <div className="flex flex-row gap-3 items-center m-3 justify-between">
+                                    <div className="flex gap-2">
+                                        <img src="user.profile_picture" className="w-7 h-7 border-2 border-gray-200 rounded-full" />
+                                        <span>{user.username}</span>
+                                    </div>
                                     <Button className="bg-blue-500 h-6" onClick={() => follow(user.user_id)}>Follow</Button>
                                 </div>
                             )
@@ -87,7 +89,7 @@ export const Rightbar = () => {
                 </div>
                 <div className="my-10">
                     <p>online friends</p>
-                    {Array.from({ length: 10 }).map((_, i) => (
+                    {Array.from({ length: 5 }).map((_, i) => (
                         <div key={i} className="flex flex-row gap-3 items-center my-3">
                             <FaUserFriends className="w-7" />
                             <span>user name</span>

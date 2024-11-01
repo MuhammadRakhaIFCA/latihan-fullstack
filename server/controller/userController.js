@@ -129,3 +129,14 @@ export const getFollowRecommendations = async (req, res) => {
         console.log(error)
     }
 }
+
+export const getUserWithChat = async (req, res) => {
+    const userId = req.params.userId
+
+    try {
+        const data = await users.getUserWithChat(userId)
+        res.status(200).json(data)
+    } catch (error) {
+        console.log(error)
+    }
+}

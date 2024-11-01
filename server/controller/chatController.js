@@ -36,3 +36,13 @@ export const getChat = async (req, res) => {
         console.log(error)
     }
 }
+export const getChatBox = async (req, res) => {
+    const userId = req.params.userId
+
+    try {
+        const data = await chats.getChatBox(userId)
+        res.status(202).json(data)
+    } catch (error) {
+        console.log(error)
+    }
+}

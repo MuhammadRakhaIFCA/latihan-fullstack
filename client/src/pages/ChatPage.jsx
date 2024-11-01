@@ -106,7 +106,7 @@ const ChatPage = () => {
             </div>
 
 
-            <ScrollArea className="flex-1 px-4 py-6 space-y-4 mb-2 max-h-[50%]">
+            <ScrollArea className="flex-1 px-4 py-6 space-y-4 mb-[66px] max-h-[50%]">
                 {loadingChat ?
                     <p>loading chat...</p>
                     : <div className="flex flex-col space-y-3">
@@ -132,16 +132,25 @@ const ChatPage = () => {
                                             {/* Render chat message */}
                                             {chat.sender_id === sender.id ? (
                                                 <div className="flex justify-end items-start gap-2">
-                                                    <div className="bg-blue-500 rounded-xl shadow-md max-w-[50%]">
-                                                        {chat.image && (
-                                                            <img src={`/uploads/${chat.image}`} alt="" className="rounded-t-xl shadow-md" />
-                                                        )}
-                                                        {chat.content && (
-                                                            <p className="p-2 text-white rounded-b-xl shadow-md text-left">
-                                                                {chat.content}
-                                                            </p>
-                                                        )}
+                                                    <div className="flex flex-col items-end max-w-[50%]">
+                                                        <div className="bg-blue-500 rounded-xl shadow-md w-full">
+                                                            {chat.image && (
+                                                                <img src={`/uploads/${chat.image}`} alt="" className="rounded-t-xl shadow-md" />
+                                                            )}
+                                                            {chat.content && (
+                                                                <p className="p-2 text-white rounded-b-xl shadow-md text-left">
+                                                                    {chat.content}
+                                                                </p>
+                                                            )}
+                                                        </div>
+
+                                                        {/* "Read" indicator */}
+                                                        {
+                                                            chat.read ? <span className="text-xs text-gray-600 mt-1">Read</span> : null
+                                                        }
+
                                                     </div>
+
                                                     <div>
                                                         <Avatar>
                                                             <AvatarImage src={`/uploads/${sender.profile_picture}`} alt="@shadcn" />
@@ -152,6 +161,7 @@ const ChatPage = () => {
                                                         </span>
                                                     </div>
                                                 </div>
+
                                             ) : (
                                                 <div className="flex items-start gap-2">
                                                     <div>

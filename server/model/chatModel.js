@@ -31,6 +31,7 @@ class chatModel {
                     c.text AS content,
                     c.image,
                     c.created_at,
+                    c.read,
                     sender.id AS sender_id,
                     sender.username AS sender_username,
                     sender.profile_picture AS sender_profile_picture,
@@ -46,10 +47,49 @@ class chatModel {
                 ORDER BY c.created_at ASC;
             `, [senderId, receiverId]);
 
+            await pool.query(`UPDATE chats SET read = true WHERE receiver_id = $1 AND sender_id = $2`,
+                [senderId, receiverId])
             return result.rows;
         } catch (error) {
             console.error(error); // Log the error for debugging
             return { error: { message: "No chat yet" } };
+        }
+    }
+
+    async getChatBox(userId) {
+        try {
+
+            const result = await pool.query(`
+                SELECT DISTINCT ON (u.id)
+                u.id,
+                u.username,
+                u.profile_picture,
+                c.id AS last_chat_id,
+                c.text AS content,
+                c.created_at AS created_at,
+                c.receiver_id AS receiver_id,
+                COALESCE(unread_count.unread_messages, 0) AS unread_message_count
+            FROM users AS u
+            JOIN chats AS c
+                ON (u.id = c.sender_id AND c.receiver_id = $1)
+                OR (u.id = c.receiver_id AND c.sender_id = $1)
+            LEFT JOIN (
+                SELECT 
+                    sender_id,
+                    receiver_id,
+                    COUNT(*) AS unread_messages
+                FROM chats
+                WHERE read = false AND receiver_id = $1
+                GROUP BY sender_id, receiver_id
+            ) AS unread_count
+                ON ((u.id = unread_count.sender_id AND unread_count.receiver_id = $1)
+                    OR (u.id = unread_count.receiver_id AND unread_count.sender_id = $1))
+            WHERE u.id != $1
+            ORDER BY u.id, c.created_at DESC;
+`, [userId])
+            return result.rows
+        } catch (error) {
+            console.error(error)
         }
     }
 
