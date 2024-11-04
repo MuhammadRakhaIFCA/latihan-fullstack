@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input"
 import { SheetComponent } from "@/components/SheetComponent"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Label } from "@/components/ui/label"
+import { ProductCard } from "@/components/ProductCard"
 
 
 const ProfilePage = () => {
@@ -29,6 +30,7 @@ const ProfilePage = () => {
     const queryClient = useQueryClient();
     const [description, setDescription] = useState("");
     const [image, setImage] = useState(null);
+    const [openProducts, setOpenProducts] = useState(false)
     const formData = new FormData();
 
     const { data: user, isLoading: loadingUser } = useQuery({
@@ -205,7 +207,9 @@ const ProfilePage = () => {
                         {currentUser.id == params.userId ?
                             <>
                                 <Button variant="destructive" onClick={() => handleLogout()}>
-                                    Logout
+                                    <Link to="/">
+                                        Logout
+                                    </Link>
                                 </Button>
                                 <Link to="/profile/edit">
                                     <Button variant="secondary">
@@ -237,6 +241,16 @@ const ProfilePage = () => {
                     </div>
                 </div>
                 {
+                    openProducts ?
+                        <div>
+                            <Button onClick={() => setOpenProducts(false)}>posts</Button>
+                        </div>
+                        :
+                        <div>
+                            <Button onClick={() => setOpenProducts(true)}>posts</Button>
+                        </div>
+                }
+                {
                     currentUser.id == params.userId ?
                         <div className="w-[90%] grid grid-cols-[5%_75%_15%] mt-7 gap-2 items-start justify-self-center">
                             <img src={`/uploads/${user.profile_picture}`} alt="" className="rounded-full w-8 h-8" />
@@ -267,23 +281,36 @@ const ProfilePage = () => {
 
                 <div className="my-10 grid justify-items-stretch">
                     {
-                        posts.map((post) => {
-                            return (
-                                <>
-                                    <Post
-                                        key={post.id}
-                                        id={post.id}
-                                        userId={post.user_id}
-                                        description={post.description}
-                                        profile_picture={user.profile_picture}
-                                        username={post.username}
-                                        postImage={post.image}
-                                        created_at={post.created_at}
-                                    />
-                                </>
-                            )
-                        })
+                        openProducts ?
+                            <div>
+
+                                <div className="grid grid-cols-2 gap-4 justify-center">
+                                    <ProductCard></ProductCard>
+                                    <ProductCard></ProductCard>
+                                    <ProductCard></ProductCard>
+                                    <ProductCard></ProductCard>
+                                </div>
+                            </div>
+                            :
+                            posts.map((post) => {
+                                return (
+                                    <>
+
+                                        <Post
+                                            key={post.id}
+                                            id={post.id}
+                                            userId={post.user_id}
+                                            description={post.description}
+                                            profile_picture={user.profile_picture}
+                                            username={post.username}
+                                            postImage={post.image}
+                                            created_at={post.created_at}
+                                        />
+                                    </>
+                                )
+                            })
                     }
+
                 </div>
             </div>
         </SignedInPage>

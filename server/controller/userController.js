@@ -25,10 +25,13 @@ export const login = async (req, res) => {
         if (data.error) {
             res.status(404).send(data.error)
         }
-        const token = jwt.sign({ id: data.id }, "secret key")
+        const token = jwt.sign({ id: data.id }, "secret key", { expiresIn: '20s' })
+        const refreshToken = jwt.sign({ id: data.id }, "refresh key", { expiresIn: '1d' })
         // const { password, ...others } = data
         res.cookie("accessToken", token, {
-            httpOnly: true
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000,
+            // sameSite: "strict"
         }).status(202).json(data)
     } catch (error) {
         console.log(error)

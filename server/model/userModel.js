@@ -20,7 +20,7 @@ class UserModel {
                 return { error: { message: "Email already taken", type: "email" } };
             }
             const result = await pool.query('INSERT INTO users (email, username, password, profile_picture) VALUES ($1, $2, $3, $4) RETURNING *',
-                [email, username, hashedPassword, "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"])
+                [email, username, hashedPassword, ""])
             return result.rows[0]
         } catch (error) {
 

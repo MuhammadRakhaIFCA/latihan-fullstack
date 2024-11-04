@@ -7,14 +7,13 @@ import userRoutes from "./routes/userRoutes.js"
 import followRoutes from "./routes/followRoutes.js"
 import commentRoutes from "./routes/commentRoutes.js"
 import chatRoutes from "./routes/chatRoutes.js"
+import productRoutes from "./routes/productRoutes.js"
 
 const app = express()
 
 const corsOption = {
     origin: ["http://localhost:5173"],
     credentials: true,
-    // methods: ["GET", "POST", "PUT", "DELETE"],
-    // allowedHeaders: ["Content-Type", "Authorization"],
 }
 
 app.use((req, res, next) => {
@@ -34,6 +33,7 @@ app.use("/posts", postRoutes)
 app.use("/users", userRoutes)
 app.use("/comments", commentRoutes)
 app.use("/chats", chatRoutes)
+app.use("/products", productRoutes)
 app.use("/", followRoutes)
 
 

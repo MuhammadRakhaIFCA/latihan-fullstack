@@ -23,10 +23,10 @@ const AllChatPage = () => {
             }
             {
                 userChatBox ?
-                    userChatBox.map((chat, index) => {
+                    userChatBox.map((chat) => {
                         const chatDate = moment(chat.created_at).fromNow();
                         return (
-                            <div className="grid grid-cols-[10%_75%_15%] bg-gray-200 items-center p-3 border-t-2 border-x-2 border-gray-300">
+                            <div className="grid grid-cols-[10%_75%_15%] bg-gray-200 items-center p-3 border-b-2 border-x-2 border-gray-300">
                                 <Link to={`/profile/${chat.id}`} className=" w-full h-full">
                                     <img src={`/uploads/${chat.profile_picture}`} alt={defaultPic} className="relative flex h-[70px] w-[70px] overflow-hidden rounded-full" />
                                 </Link>

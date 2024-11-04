@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import profilePic from "@/assets/default.jpg"
 import { useContext, useState } from "react";
 import { AuthContext } from "@/context/AuthContext";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosExpress } from "@/lib/axios";
 import {
     Command,
@@ -27,6 +27,7 @@ import { ScrollArea } from "./ui/scroll-area";
 export const Navbar = () => {
     const { currentUser } = useContext(AuthContext)
     const [showSearchBar, setShowSearchBar] = useState(false)
+    const queryClient = useQueryClient();
     const { data: browsingUser = null, isLoading: loadingUser } = useQuery({
         queryKey: ["browsingUser"],
         queryFn: () => axiosExpress.get(`/users/get/${currentUser.id}`).then((res) => res.data),
@@ -34,6 +35,12 @@ export const Navbar = () => {
     const { data: users = [], isLoading: loadingUsers } = useQuery({
         queryKey: ["users"],
         queryFn: () => axiosExpress.get(`/users/get`).then((res) => res.data),
+    });
+
+
+    const { data: userChatBox = [], isLoading: loadingChat } = useQuery({
+        queryKey: ["userChatBox"],
+        queryFn: () => axiosExpress.get(`chats/get/${currentUser.id}`).then((res) => res.data),
     });
 
 
@@ -93,6 +100,24 @@ export const Navbar = () => {
                     <RiAccountCircleLine className="w-5 h-5" />
                     <Link to="/chat/all">
                         <CiMail className="w-5 h-5" />
+                        {console.log(userChatBox.length)}
+                        {
+                            userChatBox.length > 0 ? (
+
+                                <p className="bg-red-500 absolute text-white w-4 h-4">
+                                    {userChatBox
+                                        .map((chat) => {
+                                            chat.unread_message_count > 0 ? null : null
+                                        })
+                                        .reduce((total, count) => Number(total) + Number(count), 0)
+                                    }
+                                    {/* {userChatBox
+                                        .map(chat => chat.unread_message_count || 0)
+                                        .reduce((total, count) => Number(total) + Number(count), 0)  
+                                    } */}
+                                </p>
+                            ) : null
+                        }
                     </Link>
                     <IoMdNotificationsOutline className="w-5 h-5" />
                     <Link to={`/profile/${currentUser.id}`}>
