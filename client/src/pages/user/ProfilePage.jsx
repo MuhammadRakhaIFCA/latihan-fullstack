@@ -38,6 +38,11 @@ const ProfilePage = () => {
         queryFn: () => axiosExpress.get(`/users/get/${params.userId}`).then((res) => res.data),
     });
 
+    const { data: products, isLoading: loadingProduct } = useQuery({
+        queryKey: ["products"],
+        queryFn: () => axiosExpress.get(`/products/get/${params.userId}`).then((res) => res.data)
+    })
+
 
     const { data: followStatus, isLoading: followStatusLoading } = useQuery({
         queryKey: ["followStatus", currentUser?.id, user?.id], // Unique key based on both user IDs
@@ -285,10 +290,24 @@ const ProfilePage = () => {
                             <div>
 
                                 <div className="grid grid-cols-2 gap-4 justify-center">
-                                    <ProductCard></ProductCard>
-                                    <ProductCard></ProductCard>
-                                    <ProductCard></ProductCard>
-                                    <ProductCard></ProductCard>
+                                    {
+                                        loadingProduct ? <p>loading product...</p>
+                                            :
+                                            products ?
+                                                products.map((product) => {
+                                                    return (
+                                                        <ProductCard
+                                                            id={product.id}
+                                                            name={product.name}
+                                                            description={product.description}
+                                                            price={product.price}
+                                                            stock={product.stock}
+                                                        ></ProductCard>
+                                                    )
+                                                })
+                                                : <p>this user don't have product</p>
+                                    }
+                                    {/* {console.log(products)} */}
                                 </div>
                             </div>
                             :

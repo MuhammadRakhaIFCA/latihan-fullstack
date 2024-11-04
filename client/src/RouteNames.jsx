@@ -16,6 +16,7 @@ import ExploreHomePage from './pages/user/ExploreHomePage'
 import EditProfilePage from './pages/user/EditProfilePage'
 import ChatPage from './pages/ChatPage'
 import AllChatPage from './pages/user/AllChatPage'
+import ProductDetailPage from './pages/user/ProductDetailPage'
 
 export const RouteNames = () => {
 
@@ -30,6 +31,7 @@ export const RouteNames = () => {
       <Route path="/profile/edit" element={<EditProfilePage />} />
       <Route path="/chat/all" element={<AllChatPage />} />
       <Route path="/chat/:userId" element={<ChatPage />} />
+      <Route path="/product/:productId" element={<ProductDetailPage />} />
     </Routes>
   )
 }

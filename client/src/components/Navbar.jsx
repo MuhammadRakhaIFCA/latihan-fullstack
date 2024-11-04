@@ -100,7 +100,7 @@ export const Navbar = () => {
                     <RiAccountCircleLine className="w-5 h-5" />
                     <Link to="/chat/all">
                         <CiMail className="w-5 h-5" />
-                        {console.log(userChatBox.length)}
+                        {/* {console.log(userChatBox.length)} */}
                         {
                             userChatBox.length > 0 ? (
 

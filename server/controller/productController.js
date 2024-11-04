@@ -6,9 +6,19 @@ export const getUserProduct = async (req, res) => {
     const userId = req.params.userId
     try {
         const data = await products.getUserProduct(userId)
-        res.status().json(data)
+        res.status(200).json(data)
     } catch (error) {
+        console.log(error)
+    }
+}
 
+export const getProductDetail = async (req, res) => {
+    const productId = req.params.productId
+    try {
+        const data = await products.getProductDetail(productId)
+        res.status(200).json(data)
+    } catch (error) {
+        console.log(error)
     }
 }
 

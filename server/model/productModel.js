@@ -16,6 +16,28 @@ class ProductModel {
 
         }
     }
+    async getProductDetail(productId) {
+        try {
+            const result = await pool.query(`
+                SELECT 
+                users.id as userId,
+                users.username,
+                users.profile_picture,
+                products.id as productId,
+                products.name,
+                products.description,
+                products.stock,
+                products.price,
+                products.product_image
+                FROM products
+                JOIN users ON products.owner_id = users.id
+                WHERE products.id = $1
+                `, [productId])
+            return result.rows[0]
+        } catch (error) {
+            console.log(error)
+        }
+    }
     async addProduct({ userId, name, description, price, stock, product_image }) {
         try {
             const result = await pool.query(`
