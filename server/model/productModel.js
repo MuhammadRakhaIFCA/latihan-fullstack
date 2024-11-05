@@ -49,8 +49,11 @@ class ProductModel {
             console.log(error)
         }
     }
-    async editProduct({ name, description, price, stock, product_image, id }) {
+    async editProduct({ name, description, price, stock, product_image, id, userId }) {
         try {
+            const prevImage = await pool.query(`
+                SELECT product_image FROM products WHERE id = $1   
+                `, [id])
             const result = await pool.query(`
                 UPDATE products 
                 SET 
@@ -58,13 +61,13 @@ class ProductModel {
                 description = $2,
                 price = $3,
                 stock = $4,
-                product_image = $5,
-                WHERE id = $6
+                product_image = $5
+                WHERE id = $6 AND owner_id = $7
                 RETURNING *
-                `, [name, description, price, stock, product_image, id])
+                `, [name, description, price, stock, product_image || prevImage.rows[0].product_image || "", id, userId])
             return result.rows[0]
         } catch (error) {
-
+            console.log(error)
         }
     }
 }

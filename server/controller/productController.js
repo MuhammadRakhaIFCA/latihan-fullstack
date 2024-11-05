@@ -33,12 +33,13 @@ export const addProduct = async (req, res) => {
     }
 }
 export const editProduct = async (req, res) => {
-    const { name, description, price, stock, id } = req.body
+    const { name, description, price, stock, userId } = req.body
+    const id = req.params.productId
     const product_image = req.file ? req.file.filename : null
     try {
-        const data = await products.editProduct({ userId, name, description, price, stock, product_image, id })
+        const data = await products.editProduct({ userId, name, description, price, stock, product_image, id, userId })
         res.status().json(data)
     } catch (error) {
-
+        console.log(error)
     }
 }

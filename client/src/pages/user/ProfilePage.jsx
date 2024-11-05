@@ -19,13 +19,13 @@ import { SheetComponent } from "@/components/SheetComponent"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Label } from "@/components/ui/label"
 import { ProductCard } from "@/components/ProductCard"
+import { ProductForm } from "@/components/ProductForm"
+
 
 
 const ProfilePage = () => {
     const params = useParams()
     const { currentUser } = useContext(AuthContext)
-    // const [user, setUser] = useState()
-    // const [isFollowing, setIsFollowing] = useState(false);
     const [loading, setLoading] = useState(false);
     const queryClient = useQueryClient();
     const [description, setDescription] = useState("");
@@ -104,7 +104,7 @@ const ProfilePage = () => {
     });
 
 
-    // Mutation to add a new comment
+
     const { mutate: addPost, isLoading: addingPost } = useMutation({
         mutationFn: async (formData) => {
             await axiosExpress.post("/posts/add", formData, {
@@ -118,6 +118,17 @@ const ProfilePage = () => {
         },
     });
 
+    const { mutate: addProduct, isLoading: addingProduct } = useMutation({
+        mutationFn: async (values) => {
+            await axiosExpress.post("/products/add", values, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(["products", currentUser.id]);
+            alert("product created")
+        },
+    });
 
 
     const handleFileChange = (e) => {
@@ -252,85 +263,87 @@ const ProfilePage = () => {
                         </div>
                         :
                         <div>
-                            <Button onClick={() => setOpenProducts(true)}>posts</Button>
+                            <Button onClick={() => setOpenProducts(true)}>products</Button>
                         </div>
                 }
-                {
-                    currentUser.id == params.userId ?
-                        <div className="w-[90%] grid grid-cols-[5%_75%_15%] mt-7 gap-2 items-start justify-self-center">
-                            <img src={`/uploads/${user.profile_picture}`} alt="" className="rounded-full w-8 h-8" />
-                            <div className="items-end gap-3">
-                                <Input
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    placeholder="Write a description..."
-                                />
-                                <Input
-                                    className="cursor-pointer"
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                />
-                            </div>
 
-                            <Button
-                                onClick={handleAddPost}
-                                disabled={addingPost || (!description.trim() && !image)}
-                            >
-                                {addingPost ? "Posting..." : "Post"}
-                            </Button>
-
-                        </div>
-                        : null
-                }
 
                 <div className="my-10 grid justify-items-stretch">
-                    {
-                        openProducts ?
-                            <div>
+                    {!openProducts ? (
+                        <>
 
-                                <div className="grid grid-cols-2 gap-4 justify-center">
-                                    {
-                                        loadingProduct ? <p>loading product...</p>
-                                            :
-                                            products ?
-                                                products.map((product) => {
-                                                    return (
-                                                        <ProductCard
-                                                            id={product.id}
-                                                            name={product.name}
-                                                            description={product.description}
-                                                            price={product.price}
-                                                            stock={product.stock}
-                                                        ></ProductCard>
-                                                    )
-                                                })
-                                                : <p>this user don't have product</p>
-                                    }
-                                    {/* {console.log(products)} */}
-                                </div>
-                            </div>
-                            :
-                            posts.map((post) => {
-                                return (
-                                    <>
-
-                                        <Post
-                                            key={post.id}
-                                            id={post.id}
-                                            userId={post.user_id}
-                                            description={post.description}
-                                            profile_picture={user.profile_picture}
-                                            username={post.username}
-                                            postImage={post.image}
-                                            created_at={post.created_at}
+                            {currentUser.id == params.userId && (
+                                <div className="w-[90%] grid grid-cols-[5%_75%_15%] mb-7 gap-2 items-start justify-self-center">
+                                    <img src={`/uploads/${user.profile_picture}`} alt="" className="rounded-full w-8 h-8" />
+                                    <div className="items-end gap-3">
+                                        <Input
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
+                                            placeholder="Write a description..."
                                         />
-                                    </>
-                                )
-                            })
-                    }
+                                        <Input
+                                            className="cursor-pointer"
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                        />
+                                    </div>
+                                    <Button
+                                        onClick={handleAddPost}
+                                        disabled={addingPost || (!description.trim() && !image)}
+                                    >
+                                        {addingPost ? "Posting..." : "Post"}
+                                    </Button>
+                                </div>
+                            )}
 
+                            {posts.length > 0 ? (
+                                posts.map((post) => (
+                                    <Post
+                                        key={post.id}
+                                        id={post.id}
+                                        userId={post.user_id}
+                                        description={post.description}
+                                        profile_picture={user.profile_picture}
+                                        username={post.username}
+                                        postImage={post.image}
+                                        created_at={post.created_at}
+                                    />
+                                ))
+                            ) : (
+                                <p>No posts available.</p>
+                            )}
+                        </>
+                    ) : (
+
+                        <div>
+                            <ProductForm onSubmit={addProduct} defaultId={params.userId}
+                                trigger={<Button variant="outline">Add new product</Button>}></ProductForm>
+                            <div className="grid grid-cols-2 gap-4 justify-center">
+                                {loadingProduct ? (
+                                    <p>Loading products...</p>
+                                ) : products && products.length > 0 ? (
+                                    products.map((product) => (
+                                        <ProductCard
+                                            key={product.id}
+                                            id={product.id}
+                                            name={product.name}
+                                            description={product.description}
+                                            price={product.price}
+                                            stock={product.stock}
+                                            image={product.product_image}
+                                            ownerId={product.owner_id}
+                                        />
+                                    ))
+                                ) : (
+                                    <p>This user doesn't have products.</p>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
+
+
             </div>
         </SignedInPage>
     )
